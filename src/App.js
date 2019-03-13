@@ -25,7 +25,7 @@ class App extends Component {
 						<Switch >
 							<Route path="/login" component={SModules.login}></Route>
 							<Route  path="/" render={(props) => <Layout {...props} />}></Route>
-							<Redirect to='/customerList' />
+							<Redirect to='/customer/list' />
 
 						</Switch>
 					</Router>
