@@ -13,5 +13,7 @@
     utils：工具类，
 ###webpack配置：
     config-overrides.js（可配置antd主题，webpack配置等）。
+###备注
+    1，使用css-modules，需要文件后缀为*.module.scss,如layout.module.scss.
 
 
