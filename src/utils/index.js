@@ -1,3 +1,4 @@
+import md5 from "../lib/md5";
 const util = {
 	invalid: {
 		mobileReg: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,  //验证手机号正则表达式
@@ -18,6 +19,21 @@ const util = {
 			return "";
 		}
 		return str.replace(/(^\s+)|(\s+$)/g, "");
+	},
+	initJiaMi: function (data) {
+		const obj = JSON.parse(JSON.stringify(data))
+		var arr = sort(obj).sort()
+		var str = formData(arr, obj)
+		var jiaMiStr = jiami(str)
+		return jiaMiStr
+	},
+	md5Encrypt: function (text = '') {//登录密码加密
+		if (text == '') {
+			return '';
+		}
+		let salt = '1k2b3c9d7w';
+		let str = "" + salt.charAt(0) + salt.charAt(2) + salt.charAt(7) + text + salt.charAt(5) + salt.charAt(4);
+		return md5(str);
 	},
 	setCookie: function (key, value, day) {
 		return setCookie(key, value, day)
@@ -45,7 +61,7 @@ const util = {
 		}
 		return "";
 	},
-	trimLeftRight:(s)=>{//去前后空格
+	trim:(s)=>{//去前后空格
 		return s.replace(/(^\s*)|(\s*$)/g, "");
 	},
 	getButtonAuth: (str = "") => {//获取按钮操作权限。
@@ -76,4 +92,36 @@ function setCookie(key, value, day = 1) {
 	document.cookie = key + "=" + encodeURIComponent(value) + ";expires=" + exp.toGMTString() + ";path=/";
 
 }
+function firstUpperCase(str) {
+	return str.toString()[0].toUpperCase() + str.toString().slice(1);
+}
+//重组数据
+function formData(arr, obj, time) {
+	let str = ''
+	arr.forEach(i => {
+		str += firstUpperCase(i) + "=" + (((obj[i] === null) || (obj[i] === undefined)) ? "" : obj[i]) + "&"
+	})
+	str = str + 'key=#$fsaz#SLCSas&angsi&54879!@'
+	return str
+}
+//排序
+function sort(data) {
+	var arr = []
+	for (var key in data) {
+		key && arr.push(key)
+	}
+	return arr
+}
+function initJiaMi(data = {}) {
+	const obj = JSON.parse(JSON.stringify(data))
+	var arr = sort(obj).sort()
+	var str = formData(arr, obj)
+	var jiaMiStr = jiami(str)
+	return jiaMiStr
+}
+//加密
+function jiami(str) {
+	return md5(str)
+}
+
 export default util;

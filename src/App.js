@@ -6,28 +6,34 @@
 
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import { Modules, SModules } from "./config/routeConfig";
 import { Provider } from 'mobx-react';
 import Store from "./store";
-
-import utils from "./utils";
+import LocaleProvider from 'antd/lib/locale-provider';
+import zhCN from 'antd/lib/locale-provider/zh_CN';
+import {SModules} from "./config/routeConfig";
+import Layout from "./layoutWrapper";
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
 
 class App extends Component {
-  componentDidMount() {
-  }
-  render() {
-    return (
-      <Provider store={Store}>
-        <Router>
-          <Switch >
-            <Route path="/login" component={SModules.login}></Route>
-            <Redirect to='/login' />
-          </Switch>
-        </Router>
-      </Provider>
+	render() {
+		return (
+			<LocaleProvider locale={zhCN}>
+				<Provider store={Store}>
+					<Router>
+						<Switch >
+							<Route path="/login" component={SModules.login}></Route>
+							<Route  path="/" render={(props) => <Layout {...props} />}></Route>
+							<Redirect to='/customerList' />
 
-    );
-  }
+						</Switch>
+					</Router>
+				</Provider>
+			</LocaleProvider>
+
+		);
+	}
 }
 
 export default App;

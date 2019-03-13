@@ -3,13 +3,18 @@
  * 路由模块配置。
  */
 import Bundle from "./bundle";
+import loadComp from "./loadComp";
 
+const loginComp = loadComp("login");
+const customerListComp = loadComp("customer/customerList");
+const productListComp = loadComp("product/productList");
+const orderListComp = loadComp("product/orderList");
 
-import loginComp from "bundle-loader?lazy&name=app-[name]!../pages/login";
 
 let arr = [
-	{ key: "login", comp: loginComp, path: "/login" },
-	
+	{comp: customerListComp, path: "/customer/list" },
+	{comp: productListComp, path: "/product/list" },
+	{comp: orderListComp, path: "/product/orderList" },
 ];
 
 let Modules = [];

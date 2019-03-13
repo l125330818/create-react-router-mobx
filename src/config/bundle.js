@@ -25,10 +25,8 @@ export default class Bundle extends React.Component {
 		this.setState({
 			mod: null
 		})
-		props.load((mod) => {
-			this.setState({
-				mod: mod.default ? mod.default : mod
-			})
+		this.setState({
+			mod:props.load,
 		})
 	}
 

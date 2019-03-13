@@ -1,4 +1,5 @@
 import demoStore from "./demo";
+
 const stores = {
     demoStore,
 }
