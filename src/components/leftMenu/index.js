@@ -8,27 +8,53 @@ export default class Index extends React.Component {
         super(props);
         this.state = {
             menuTree: [],
-            defaultOpenKeys:[],//选中
-            defaultSelectedKeys:[],
+            openKeys: [],//选中
+            selectedKeys: [],
         }
     }
-    componentWillMount() {
-        let data = this.handleMenuData(menuData);
+    componentWillReceiveProps(nextProps) {
+        if (this.pathname == "/") {//为了处理从没有路由重定向过来的没有menu选中情况。
+            let { pathname } = nextProps.location;
+            this.setKeys(pathname);
+            this.pathname = pathname;
+        }
+    }
+    componentDidMount() {
         let {pathname} = location;
+        this.initData();
+        this.setKeys(pathname);
+
+    }
+    /**
+     * 
+     * @param {*} pathname 
+     * 设置menu选中的keys
+     */
+    setKeys(pathname) {
         let pArr = pathname.split("/");
-        let defaultOpenKeys = [`/${pArr[1]}`];//路由第一级value
-        let defaultSelectedKeys = [`/${pArr[1]}/${pArr[2]}`];//路由第二级value
+        let openKeys = [`/${pArr[1]}`];//路由第一级value
+        let selectedKeys = [`/${pArr[1]}/${pArr[2]}`];//路由第二级value
+        this.setState({
+            openKeys,
+            selectedKeys
+        });
+        this.pathname = pathname;
+    }
+    initData() {
+        let data = this.handleMenuData(menuData);
+        this.pathname = location.pathname;
         this.setState({
             menuTree: data,
-            defaultOpenKeys,
-            defaultSelectedKeys
         })
+    }
+    componentWillMount() {
+
     }
     /**
      * 
      * @param {*} data 
      * @param {*} parentPath 
-     * 拼接路由path。
+     * 拼接路由path，拼接数据。
      */
     handleMenuData(data = [], parentPath = "/") {
         return data.map(item => {
@@ -49,7 +75,15 @@ export default class Index extends React.Component {
 
     }
     handleClick = (e) => {
+        this.setState({
+            selectedKeys: [e.key]
+        })
         this.props.history.push(`${e.key}`)
+    }
+    onOpenChange = (e) => {
+        this.setState({
+            openKeys: e,
+        })
     }
     getItem = () => {
         let { menuTree } = this.state;
@@ -75,7 +109,7 @@ export default class Index extends React.Component {
         })
     }
     render() {
-        let {defaultSelectedKeys,defaultOpenKeys} = this.state;
+        let { selectedKeys, openKeys } = this.state;
         return (
             <div className={styles["left-menu"]}>
                 <div className={styles["left-menu-box"]}>
@@ -84,9 +118,10 @@ export default class Index extends React.Component {
 
                 <Menu
                     onClick={this.handleClick}
+                    onOpenChange={this.onOpenChange}
                     style={{ width: 256 }}
-                    defaultOpenKeys = {defaultOpenKeys}
-                    defaultSelectedKeys = {defaultSelectedKeys}
+                    openKeys={openKeys}
+                    selectedKeys={selectedKeys}
                     mode="inline"
                 >
                     {
